@@ -21,11 +21,11 @@ export class ECommerceBeStack extends Stack {
 
     // Case A - Base Lambda Function
 
-    const productFunctionA = new Function(this, 'MyFunction', {
-      runtime: Runtime.NODEJS_16_X,
-      handler: 'index.handler',
-      code: Code.fromAsset(join(__dirname, 'lambda-handler'))
-    });
+    // const productFunctionA = new Function(this, 'MyFunction', {
+    //   runtime: Runtime.NODEJS_16_X,
+    //   handler: 'index.handler',
+    //   code: Code.fromAsset(join(__dirname, 'lambda-handler'))
+    // });
 
     // Case B - Advaced Lambda Function with NodejsFunction module
 
