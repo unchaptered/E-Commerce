@@ -1,4 +1,5 @@
 import { RemovalPolicy, Stack, StackProps } from 'aws-cdk-lib';
+import { LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction, NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
@@ -8,6 +9,8 @@ import { join } from 'path';
 export class ECommerceBeStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
+
+    // DynamoDB
 
     const productTable = new Table(this, 'product', {
       partitionKey: {
@@ -19,16 +22,7 @@ export class ECommerceBeStack extends Stack {
       billingMode: BillingMode.PAY_PER_REQUEST
     });
 
-    // Product Micorserivces API Gateway
-    // root name = product
-
-    // GET /product
-    // POST /product
-
-    // Single product with id parameter
-    // GET /product/{id}
-    // PUT /product/{id}
-    // DELETE /product/{id}
+    // Lambda Function
 
     const productProps: NodejsFunctionProps = {
       bundling: {
@@ -43,14 +37,30 @@ export class ECommerceBeStack extends Stack {
       runtime: Runtime.NODEJS_16_X,
     };
 
-    const productFunctionB = new NodejsFunction(this, 'productFunction', {
+    const productFunction = new NodejsFunction(this, 'productFunction', {
       entry: join(__dirname, '/../src/product/index.js'),
       ...productProps
     });
 
     // Grant a Role to read and write in DynamoDB Table
+    productTable.grantReadWriteData(productFunction);
 
-    productTable.grantReadWriteData(productFunctionB);
+    // API Gateway
+
+    const productApiGateway = new LambdaRestApi(this, 'productApi', {
+      restApiName: 'Product Service',
+      handler: productFunction,
+      proxy: false
+    })
+
+    const product = productApiGateway.root.addResource('product');
+    product.addMethod('GET');
+    product.addMethod('POST');
+
+    const singleProduct = product.addResource('{id}');
+    singleProduct.addMethod('GET');
+    singleProduct.addMethod('PUT');
+    singleProduct.addMethod('DELETE');
 
   }
 }
