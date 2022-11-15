@@ -19,15 +19,16 @@ export class ECommerceBeStack extends Stack {
       billingMode: BillingMode.PAY_PER_REQUEST
     });
 
-    // Case A - Base Lambda Function
+    // Product Micorserivces API Gateway
+    // root name = product
 
-    // const productFunctionA = new Function(this, 'MyFunction', {
-    //   runtime: Runtime.NODEJS_16_X,
-    //   handler: 'index.handler',
-    //   code: Code.fromAsset(join(__dirname, 'lambda-handler'))
-    // });
+    // GET /product
+    // POST /product
 
-    // Case B - Advaced Lambda Function with NodejsFunction module
+    // Single product with id parameter
+    // GET /product/{id}
+    // PUT /product/{id}
+    // DELETE /product/{id}
 
     const productProps: NodejsFunctionProps = {
       bundling: {
