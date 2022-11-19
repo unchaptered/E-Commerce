@@ -1,6 +1,6 @@
 // Lib Dependency
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
-const { GetItemCommand, ScanCommand, PutItemCommand, DeleteItemCommand, UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
+const { GetItemCommand, ScanCommand, PutItemCommand, DeleteItemCommand, UpdateItemCommand, QueryCommand } = require("@aws-sdk/client-dynamodb");
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -22,33 +22,41 @@ exports.handler = async function (event) {
 	 */
 	switch (event.httpMethod) {
 		case 'GET':
-			if (event.pathParameters !== null) {
-				/**
-				 * GET product/{id}
-				 */
+			if (event.queryStringParameters !== null) {
+
+				/** GET product/1234?category=Phone */
+				body = await getProductByCategory(event);
+
+			} else if (event.pathParameters !== null) {
+
+				/** GET product/{id} */
 				body = await getProduct(event.pathParameters.id);
+
 			} else {
-				/**
-				 * GET product
-				 */
+
+				/** GET product */
 				body = await getAllProducts();
+
 			}
 			break;
+
 		case 'POST':
+
 			body = await createProduct(event);
 			break;
+
 		case 'DELETE':
-			/**
-			 * DELETE product/{id}
-			 */
+
+			/** DELETE product/{id} */
 			body = await deleteProduct(event.pathParameters.id);
 			break;
+
 		case 'PUT':
-			/**
-			 * PUT product/{id}
-			 */
+
+			/** PUT product/{id} */
 			body = await updateProduct(event);
 			break;
+
 		default:
 			throw new Error(`Unsupported route: "${event.httpMethod}"`);
 	}
@@ -80,6 +88,38 @@ const getProduct = async (productId) => {
 		const { Item } = await ddbClient.send(new GetItemCommand(params));
 
 		return (Item) ? unmarshall(Item) : {};
+
+	} catch (e) {
+		console.log(e);
+		throw e;
+	}
+}
+
+/**
+ * @link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/querycommand.html
+ */
+const getProductByCategory = async (event) => {
+
+	console.log(`getProductByCategory function. event "${event}"`);
+
+	try {
+
+		const productId = event.pathParameters.id;
+		const category = event.queryStringParameters.category;
+
+		/** @type { import("@aws-sdk/client-dynamodb").QueryCommandInput } */
+		const params = {
+			TableName: process.env.DYNAMODB_TABLE_NAME,
+			KeyConditionExpression: 'id = :productId',
+			FilterExpression: 'contains (category, :category)',
+			ExpressionAttributeValues: {
+				':productId': { S: productId },
+				':category': { S: category }
+			}
+		};
+		const { Items } = await ddbClient.send(new QueryCommand(params));
+
+		return Items.map((item) => unmarshall(item));
 
 	} catch (e) {
 		console.log(e);
