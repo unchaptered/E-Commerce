@@ -1,6 +1,6 @@
 // Lib Dependency
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
-const { GetItemCommand, GetItemCommandInput } = require("@aws-sdk/client-dynamodb");
+const { GetItemCommand, ScanCommand } = require("@aws-sdk/client-dynamodb");
 
 // Custom Dependency
 const { ddbClient } = require("./ddbClient");
@@ -41,13 +41,16 @@ exports.handler = async function (event) {
 };
 
 
+/**
+ * @link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/getitemcommand.html
+ */
 const getProduct = async (productId) => {
 
 	console.log('getProduct');
 
 	try {
 
-		/** @type { GetItemCommandInput } */
+		/** @type { import("@aws-sdk/client-dynamodb").GetItemCommandInput } */
 		const params = {
 			TableName: process.env.DYNAMODB_TABLE_NAME,
 			Key: marshall({ id: productId })
@@ -55,6 +58,30 @@ const getProduct = async (productId) => {
 		const { Item } = await ddbClient.send(new GetItemCommand(params));
 
 		return (Item) ? unmarshall(Item) : {};
+
+	} catch (e) {
+		console.log(e);
+		throw e;
+	}
+}
+
+/**
+ * @link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/scancommand.html
+ */
+const getAllProducts = async () => {
+
+	console.log('getAllProducts');
+
+	try {
+
+		/** @type { import("@aws-sdk/client-dynamodb").ScanCommandInput } */
+		const params = {
+			TableName: process.env.DYNAMODB_TABLE_NAME,
+			Limit: 10
+		};
+		const { Items } = await ddbClient.send(new ScanCommand(params));
+
+		return (Items) ? Items.map((item) => unmarshall(item)) : {};
 
 	} catch (e) {
 		console.log(e);
