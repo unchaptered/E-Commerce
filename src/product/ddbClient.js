@@ -1,6 +1,8 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 /**
+ * Section 19 - 124 Developing Product Lambda Micorservice with DynamoDb Client - AWS SDK for JS v3
+ * 
  * So, we have created DynamoDB Client is a Node.js module.<br>
  * Because the connection management will be handled in one time for lambda exectuion.
  * 
@@ -12,3 +14,9 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 const ddbClient = new DynamoDBClient();
 
 export { ddbClient };
+
+/**
+ * Section 19 - 127 Understanding DynamoDB Interactions - Working with items and Attirbutes
+ * 
+ * Official docs - https://docs.aws.amazon.com/ko_kr/amazondynamodb/latest/developerguide/WorkingWithItems.html
+ */

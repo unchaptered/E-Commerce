@@ -8,14 +8,20 @@
 exports.handler = async function (event) {
 	console.log('request:', JSON.stringify(event, undefined, 2));
 
-	// TODO - switch case event.httpMethod to perform CRUD operations
-	// with using ddbClient object
-
+	/**
+	 * TODO - switch case event.httpMethod to perform CRUD operations with using ddbClient object
+	 */
 	switch (event.httpMethod) {
 		case 'GET':
 			if (event.pathParameters !== null) {
+				/**
+				 * GET product/{id}
+				 */
 				body = await getProduct(event.pathParameters.id);
 			} else {
+				/**
+				 * GET product
+				 */
 				body = await getAllProducts();
 			}
 	}
