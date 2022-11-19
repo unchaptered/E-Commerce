@@ -1,6 +1,6 @@
 // Lib Dependency
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
-const { GetItemCommand, ScanCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+const { GetItemCommand, ScanCommand, PutItemCommand, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -33,11 +33,21 @@ exports.handler = async function (event) {
 				 */
 				body = await getAllProducts();
 			}
+			break;
 		case 'POST':
 			body = await createProduct(event);
+			break;
+		case 'DELETE':
+			/**
+			 * DELETE product/{id}
+			 */
+			body = await deleteProduct(event.pathParameters.id);
+			break;
 		default:
 			throw new Error(`Unsupported route: "${event.httpMethod}"`);
 	}
+
+	console.log(body);
 
 	return {
 		status: 200,
@@ -117,6 +127,28 @@ const createProduct = async (event) => {
 
 		return createResult;
 
+	} catch (e) {
+		console.log(e);
+		throw e;
+	}
+}
+
+/**
+ * @link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/deleteitemcommand.html
+ */
+const deleteProduct = async (productId) => {
+
+	console.log(`productId function.productId : "${productId}"`);
+	try {
+
+		/** @type { import("@aws-sdk/client-dynamodb").DeleteItemCommandInput } */
+		const params = {
+			TableName: productId.env.DYNAMODB_TABLE_NAME,
+			Key: marshall({ id: productId })
+		};
+		const deleteResult = await ddbClient.send(new DeleteItemCommand(params));
+
+		return deleteResult;
 	} catch (e) {
 		console.log(e);
 		throw e;
