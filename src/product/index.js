@@ -1,6 +1,6 @@
 // Lib Dependency
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
-const { GetItemCommand, ScanCommand, PutItemCommand, DeleteItemCommand } = require("@aws-sdk/client-dynamodb");
+const { GetItemCommand, ScanCommand, PutItemCommand, DeleteItemCommand, UpdateItemCommand } = require("@aws-sdk/client-dynamodb");
 
 const { v4: uuidv4 } = require('uuid');
 
@@ -43,6 +43,12 @@ exports.handler = async function (event) {
 			 */
 			body = await deleteProduct(event.pathParameters.id);
 			break;
+		case 'PUT':
+			/**
+			 * PUT product/{id}
+			 */
+			body = await updateProduct(event);
+			break;
 		default:
 			throw new Error(`Unsupported route: "${event.httpMethod}"`);
 	}
@@ -62,7 +68,7 @@ exports.handler = async function (event) {
  */
 const getProduct = async (productId) => {
 
-	console.log('getProduct');
+	console.log(`getProduct function. productId : "${productId}"`);
 
 	try {
 
@@ -110,7 +116,7 @@ const getAllProducts = async () => {
  */
 const createProduct = async (event) => {
 
-	console.log(`createProduct function.event : "${event}"`);
+	console.log(`createProduct function. event : "${event}"`);
 
 	try {
 		const parsedBody = {
@@ -138,7 +144,8 @@ const createProduct = async (event) => {
  */
 const deleteProduct = async (productId) => {
 
-	console.log(`productId function.productId : "${productId}"`);
+	console.log(`deleteProduct function. productId : "${productId}"`);
+
 	try {
 
 		/** @type { import("@aws-sdk/client-dynamodb").DeleteItemCommandInput } */
@@ -149,6 +156,47 @@ const deleteProduct = async (productId) => {
 		const deleteResult = await ddbClient.send(new DeleteItemCommand(params));
 
 		return deleteResult;
+	} catch (e) {
+		console.log(e);
+		throw e;
+	}
+}
+
+/**
+ * @link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/updateitemcommand.html
+ */
+const updateProduct = async (event) => {
+
+	console.log(`updateProduct function. event : "${productId}"`);
+
+	try {
+
+		const parsedBody = JSON.parse(event.body);
+		const objKeys = Object.keys(parsedBody);
+
+		console.log(`updateProduct function. parsedBody : "${parsedBody}", objKeys: "${objKeys}"`);
+
+		/** @type { import("@aws-sdk/client-dynamodb").UpdateItemCommandInput} */
+		const params = {
+			TableName: process.env.DYNAMODB_TABLE_NAME,
+			Key: marshall({ id: event.pathParameters.id }),
+			UpdateExpression: `SET ${objKeys.map(
+				(_, index) => `#key${index} = :value=${index}`
+			).join(',')}`,
+			ExpressionAttributeNames: objKeys.reduce((acc, key, index) => ({
+				...acc,
+				[`#key${index}`]: parsedBody[key]
+			}), {}),
+			ExpressionAttributeValues: objKeys.reduce((acc, key, index) => ({
+				...acc,
+				[`:value${index}`]: parsedBody[key]
+			}), {})
+		};
+
+		const updateResult = await ddbClient.send(new UpdateItemCommand(params));
+
+		return updateResult;
+
 	} catch (e) {
 		console.log(e);
 		throw e;
