@@ -1,6 +1,8 @@
 // Lib Dependency
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
-const { GetItemCommand, ScanCommand } = require("@aws-sdk/client-dynamodb");
+const { GetItemCommand, ScanCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+
+const { v4: uuidv4 } = require('uuid');
 
 // Custom Dependency
 const { ddbClient } = require("./ddbClient");
@@ -31,6 +33,10 @@ exports.handler = async function (event) {
 				 */
 				body = await getAllProducts();
 			}
+		case 'POST':
+			body = await createProduct(event);
+		default:
+			throw new Error(`Unsupported route: "${event.httpMethod}"`);
 	}
 
 	return {
@@ -82,6 +88,34 @@ const getAllProducts = async () => {
 		const { Items } = await ddbClient.send(new ScanCommand(params));
 
 		return (Items) ? Items.map((item) => unmarshall(item)) : {};
+
+	} catch (e) {
+		console.log(e);
+		throw e;
+	}
+}
+
+/**
+ * @link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/putitemcommand.html
+ */
+const createProduct = async (event) => {
+
+	console.log(`createProduct function.event : "${event}"`);
+
+	try {
+		const parsedBody = {
+			...JSON.parse(event.body),
+			id: uuidv4()
+		};
+
+		/** @type { import("@aws-sdk/client-dynamodb").PutItemCommandInput} */
+		const params = {
+			TableName: process.env.DYNAMODB_TABLE_NAME,
+			Item: marshall(parsedBody)
+		}
+		const createResult = await ddbClient.send(new PutItemCommand(params));
+
+		return createResult;
 
 	} catch (e) {
 		console.log(e);
