@@ -17,57 +17,77 @@ const { ddbClient } = require("./ddbClient");
 exports.handler = async function (event) {
 	console.log('request:', JSON.stringify(event, undefined, 2));
 
-	/**
-	 * TODO - switch case event.httpMethod to perform CRUD operations with using ddbClient object
-	 */
-	switch (event.httpMethod) {
-		case 'GET':
-			if (event.queryStringParameters !== null) {
+	try {
 
-				/** GET product/1234?category=Phone */
-				body = await getProductByCategory(event);
+		/**
+		 * TODO - switch case event.httpMethod to perform CRUD operations with using ddbClient object
+		 */
+		switch (event.httpMethod) {
+			case 'GET':
+				if (event.queryStringParameters !== null) {
 
-			} else if (event.pathParameters !== null) {
+					/** GET product/1234?category=Phone */
+					body = await getProductByCategory(event);
 
-				/** GET product/{id} */
-				body = await getProduct(event.pathParameters.id);
+				} else if (event.pathParameters !== null) {
 
-			} else {
+					/** GET product/{id} */
+					body = await getProduct(event.pathParameters.id);
 
-				/** GET product */
-				body = await getAllProducts();
+				} else {
 
-			}
-			break;
+					/** GET product */
+					body = await getAllProducts();
 
-		case 'POST':
+				}
+				break;
 
-			body = await createProduct(event);
-			break;
+			case 'POST':
 
-		case 'DELETE':
+				body = await createProduct(event);
+				break;
 
-			/** DELETE product/{id} */
-			body = await deleteProduct(event.pathParameters.id);
-			break;
+			case 'DELETE':
 
-		case 'PUT':
+				/** DELETE product/{id} */
+				body = await deleteProduct(event.pathParameters.id);
+				break;
 
-			/** PUT product/{id} */
-			body = await updateProduct(event);
-			break;
+			case 'PUT':
 
-		default:
-			throw new Error(`Unsupported route: "${event.httpMethod}"`);
+				/** PUT product/{id} */
+				body = await updateProduct(event);
+				break;
+
+			default:
+				throw new Error(`Unsupported route: "${event.httpMethod}"`);
+		}
+
+		console.log(body);
+
+		return {
+			status: 200,
+			body: JSON.stringify({
+				message: `Successfully finishied operation : "${event.httpMethod}"`,
+				body: body
+			})
+		};
+
+	} catch (e) {
+		console.error(e);
+
+		return {
+			statusCode: 500,
+			body: JSON.stringify({
+				message: JSON.stringify({
+					message: "Failed to perform operation",
+					errorMsg: e.message,
+					errorStack: e.stack
+				})
+			})
+		};
+
 	}
-
-	console.log(body);
-
-	return {
-		status: 200,
-		headers: { 'Content-Type': 'text/plain' },
-		body: `Helllo from Product! You've hit ${event.path}`,
-	};
 };
 
 
