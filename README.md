@@ -52,6 +52,7 @@ now, preparing...
 >
 E-Commerce-Be is clone project.<br>
 It's built as Serverless Microsevices Architecture.<br>
+S
 
 ![](./images/infastructure-architecture.png)
 
