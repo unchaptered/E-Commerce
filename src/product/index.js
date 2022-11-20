@@ -19,62 +19,64 @@ exports.handler = async function (event) {
 
 	try {
 
+		let resultBody;
+
 		/**
 		 * TODO - switch case event.httpMethod to perform CRUD operations with using ddbClient object
 		 */
 		switch (event.httpMethod) {
 			case 'GET':
-				if (event.queryStringParameters !== null) {
+				if (event.queryStringParameters != null) {
 
 					/** GET product/1234?category=Phone */
-					body = await getProductByCategory(event);
+					resultBody = await getProductByCategory(event);
 
-				} else if (event.pathParameters !== null) {
+				} else if (event.pathParameters != null) {
 
 					/** GET product/{id} */
-					body = await getProduct(event.pathParameters.id);
+					resultBody = await getProduct(event.pathParameters.id);
 
 				} else {
 
 					/** GET product */
-					body = await getAllProducts();
+					resultBody = await getAllProducts();
 
 				}
 				break;
 
 			case 'POST':
 
-				body = await createProduct(event);
+				resultBody = await createProduct(event);
 				break;
 
 			case 'DELETE':
 
 				/** DELETE product/{id} */
-				body = await deleteProduct(event.pathParameters.id);
+				resultBody = await deleteProduct(event.pathParameters.id);
 				break;
 
 			case 'PUT':
 
 				/** PUT product/{id} */
-				body = await updateProduct(event);
+				resultBody = await updateProduct(event);
 				break;
 
 			default:
 				throw new Error(`Unsupported route: "${event.httpMethod}"`);
 		}
 
-		console.log(body);
+		console.log('resultBody:', JSON.stringify(resultBody));
 
 		return {
-			status: 200,
+			statusCode: 200,
 			body: JSON.stringify({
 				message: `Successfully finishied operation : "${event.httpMethod}"`,
-				body: body
+				body: resultBody
 			})
 		};
 
 	} catch (e) {
-		console.error(e);
+		console.log(e);
 
 		return {
 			statusCode: 500,
@@ -138,6 +140,7 @@ const getProductByCategory = async (event) => {
 			}
 		};
 		const { Items } = await ddbClient.send(new QueryCommand(params));
+		console.log('getProductByCategory Items:', JSON.stringify(Items));
 
 		return Items.map((item) => unmarshall(item));
 
@@ -162,6 +165,7 @@ const getAllProducts = async () => {
 			Limit: 10
 		};
 		const { Items } = await ddbClient.send(new ScanCommand(params));
+		console.log('getAllProducts Items:', JSON.stringify(Items));
 
 		return (Items) ? Items.map((item) => unmarshall(item)) : {};
 
@@ -191,6 +195,8 @@ const createProduct = async (event) => {
 		}
 		const createResult = await ddbClient.send(new PutItemCommand(params));
 
+		console.log('createResult ddbClient Result:', JSON.stringify(updateResult));
+
 		return createResult;
 
 	} catch (e) {
@@ -214,6 +220,8 @@ const deleteProduct = async (productId) => {
 			Key: marshall({ id: productId })
 		};
 		const deleteResult = await ddbClient.send(new DeleteItemCommand(params));
+
+		console.log('deleteResult ddbClient Result:', JSON.stringify(updateResult));
 
 		return deleteResult;
 	} catch (e) {
@@ -254,6 +262,8 @@ const updateProduct = async (event) => {
 		};
 
 		const updateResult = await ddbClient.send(new UpdateItemCommand(params));
+
+		console.log('getAllProducts ddbClient Result:', JSON.stringify(updateResult));
 
 		return updateResult;
 
