@@ -28,7 +28,7 @@ exports.handler = async function (event) {
 			case 'GET':
 				if (event.queryStringParameters != null) {
 
-					/** GET product/1234?category=Phone */
+					/** GET product/{id}?category=Phone */
 					resultBody = await getProductByCategory(event);
 
 				} else if (event.pathParameters != null) {
@@ -216,7 +216,7 @@ const deleteProduct = async (productId) => {
 
 		/** @type { import("@aws-sdk/client-dynamodb").DeleteItemCommandInput } */
 		const params = {
-			TableName: productId.env.DYNAMODB_TABLE_NAME,
+			TableName: process.env.DYNAMODB_TABLE_NAME,
 			Key: marshall({ id: productId })
 		};
 		const deleteResult = await ddbClient.send(new DeleteItemCommand(params));
@@ -235,7 +235,7 @@ const deleteProduct = async (productId) => {
  */
 const updateProduct = async (event) => {
 
-	console.log(`updateProduct function. event : "${productId}"`);
+	console.log(`updateProduct function. event : "${event}"`);
 
 	try {
 
@@ -249,16 +249,15 @@ const updateProduct = async (event) => {
 			TableName: process.env.DYNAMODB_TABLE_NAME,
 			Key: marshall({ id: event.pathParameters.id }),
 			UpdateExpression: `SET ${objKeys.map(
-				(_, index) => `#key${index} = :value=${index}`
-			).join(',')}`,
+				(_, index) => `#key${index} = :value${index}`).join(", ")}`,
 			ExpressionAttributeNames: objKeys.reduce((acc, key, index) => ({
 				...acc,
-				[`#key${index}`]: parsedBody[key]
+				[`#key${index}`]: key,
 			}), {}),
-			ExpressionAttributeValues: objKeys.reduce((acc, key, index) => ({
+			ExpressionAttributeValues: marshall(objKeys.reduce((acc, key, index) => ({
 				...acc,
-				[`:value${index}`]: parsedBody[key]
-			}), {})
+				[`:value${index}`]: parsedBody[key],
+			}), {})),
 		};
 
 		const updateResult = await ddbClient.send(new UpdateItemCommand(params));
