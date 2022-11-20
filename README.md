@@ -1,8 +1,10 @@
 # e-commerce-be
 
-
 > Period : 11-14, 2022 ~ ing<br>
 > Contributers : [@unchaptered](https://github.com/unchaptered)
+> Versions <br>
+> - English [Open (now)](./README.md)
+> - Korean [Open](./README(KR).md)
 
 This project, **e-commerce-be**, is created to archive these goals.<br>
 
