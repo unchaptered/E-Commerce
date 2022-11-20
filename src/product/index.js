@@ -195,7 +195,7 @@ const createProduct = async (event) => {
 		}
 		const createResult = await ddbClient.send(new PutItemCommand(params));
 
-		console.log('createResult ddbClient Result:', JSON.stringify(updateResult));
+		console.log('createResult ddbClient Result:', JSON.stringify(createResult));
 
 		return createResult;
 
@@ -221,7 +221,7 @@ const deleteProduct = async (productId) => {
 		};
 		const deleteResult = await ddbClient.send(new DeleteItemCommand(params));
 
-		console.log('deleteResult ddbClient Result:', JSON.stringify(updateResult));
+		console.log('deleteResult ddbClient Result:', JSON.stringify(deleteResult));
 
 		return deleteResult;
 	} catch (e) {
