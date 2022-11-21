@@ -5,25 +5,15 @@ import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction, NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import { join } from 'path';
+import { DynamoDBConstruct } from './dynamodb-construct';
 
 export class AwsInfrastructureStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    // DynamoDB
-
-    const productTable = new Table(this, 'product', {
-      partitionKey: {
-        name: 'id',
-        type: AttributeType.STRING
-      },
-      tableName: 'product',
-      removalPolicy: RemovalPolicy.DESTROY,
-      billingMode: BillingMode.PAY_PER_REQUEST
-    });
+    const dynamoDB = new DynamoDBConstruct(this, 'DynamoDatabase');
 
     // Lambda Function
-
     const productProps: NodejsFunctionProps = {
       bundling: {
         externalModules: [
@@ -32,7 +22,7 @@ export class AwsInfrastructureStack extends Stack {
       },
       environment: {
         PRIMARY_KEY: 'id',
-        DYNAMODB_TABLE_NAME: productTable.tableName
+        DYNAMODB_TABLE_NAME: dynamoDB.productTable.tableName
       },
       runtime: Runtime.NODEJS_16_X,
     };
@@ -43,7 +33,7 @@ export class AwsInfrastructureStack extends Stack {
     });
 
     // Grant a Role to read and write in DynamoDB Table
-    productTable.grantReadWriteData(productFunction);
+    dynamoDB.productTable.grantReadWriteData(productFunction);
 
     // API Gateway
 
