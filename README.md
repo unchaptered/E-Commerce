@@ -62,7 +62,7 @@ This project, **e-commerce-be**, is created to archive these goals.<br>
 
 | Release         | Descdription                             |
 | --------------- | ---------------------------------------- |
-| v1.0.0          | Deploy Product Microsevices with AWS CDK |
+| [v1.0.0](https://github.com/unchaptered/e-commerce-be/releases/tag/v1.0.0)          | Deploy Product Microsevices with AWS CDK |
 
 ---
 

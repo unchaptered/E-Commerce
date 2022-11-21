@@ -61,7 +61,7 @@
 
 | 릴리즈          | 설명                             |
 | --------------- | ---------------------------------------- |
-| v1.0.0          | Product 마이크로서비스 배포하기 (CDK 사용) |
+| [v1.0.0](https://github.com/unchaptered/e-commerce-be/releases/tag/v1.0.0)          | Product 마이크로서비스 배포하기 (CDK 사용) |
 
 ---
 
