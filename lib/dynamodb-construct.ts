@@ -1,5 +1,7 @@
-// Lib Dependency
+// CloudFormation Dependency
 import { Construct } from 'constructs';
+
+// CDK Dependencies
 import { RemovalPolicy } from 'aws-cdk-lib';
 import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
 

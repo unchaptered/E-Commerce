@@ -1,5 +1,7 @@
-// Lib Dependency
+// CloudFormation Dependency
 import { Construct } from 'constructs';
+
+// CDK Dependencies
 import { IFunction } from 'aws-cdk-lib/aws-lambda';
 import { LambdaRestApi } from 'aws-cdk-lib/aws-apigateway';
 
