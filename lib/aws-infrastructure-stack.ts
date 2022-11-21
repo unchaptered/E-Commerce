@@ -5,8 +5,7 @@ import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction, NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import { join } from 'path';
-
-
+import { ApiGatewayConstruct } from './api-gateway';
 import { DynamoDBConstruct } from './dynamodb-construct';
 import { MicroservicesConstruct } from './microservices-construct';
 
@@ -16,23 +15,13 @@ export class AwsInfrastructureStack extends Stack {
 
     const dynamoDB = new DynamoDBConstruct(this, 'DynamoDatabaseConstruct');
 
-    const productMicroservice = new MicroservicesConstruct(this, 'MicroservicesConstruct', dynamoDB);
+    const microservices = new MicroservicesConstruct(this, 'MicroservicesConstruct', {
+      productTable: dynamoDB.productTable
+    });
 
-    // API Gateway
-    const productApiGateway = new LambdaRestApi(this, 'productApi', {
-      restApiName: 'Product Service',
-      handler: productMicroservice.productMicroservice,
-      proxy: false
-    })
-
-    const product = productApiGateway.root.addResource('product');
-    product.addMethod('GET');
-    product.addMethod('POST');
-
-    const singleProduct = product.addResource('{id}');
-    singleProduct.addMethod('GET');
-    singleProduct.addMethod('PUT');
-    singleProduct.addMethod('DELETE');
+    const apiGateway = new ApiGatewayConstruct(this, 'ApiGatewayConstruct', {
+      productMicroservice: microservices.productMicroservice
+    });
 
   }
 }
