@@ -4,7 +4,7 @@ import { Construct } from 'constructs';
 // CDK Dependency
 import { Stack, StackProps } from 'aws-cdk-lib';
 
-// CLustom Dependencies
+// Custom Dependencies
 import { ApiGatewayConstruct } from './api-gateway';
 import { DynamoDBConstruct } from './dynamodb-construct';
 import { MicroservicesConstruct } from './microservices-construct';
@@ -18,10 +18,5 @@ export class AwsInfrastructureStack extends Stack {
     const microservices = new MicroservicesConstruct(this, 'MicroservicesConstruct', {
       productTable: dynamoDB.productTable
     });
-
-    const apiGateway = new ApiGatewayConstruct(this, 'ApiGatewayConstruct', {
-      productMicroservice: microservices.productMicroservice
-    });
-
   }
 }
