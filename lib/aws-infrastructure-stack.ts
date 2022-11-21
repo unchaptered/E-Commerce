@@ -5,41 +5,23 @@ import { Code, Function, Runtime } from 'aws-cdk-lib/aws-lambda';
 import { NodejsFunction, NodejsFunctionProps } from 'aws-cdk-lib/aws-lambda-nodejs';
 import { Construct } from 'constructs';
 import { join } from 'path';
+
+
 import { DynamoDBConstruct } from './dynamodb-construct';
+import { MicroservicesConstruct } from './microservices-construct';
 
 export class AwsInfrastructureStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
-    const dynamoDB = new DynamoDBConstruct(this, 'DynamoDatabase');
+    const dynamoDB = new DynamoDBConstruct(this, 'DynamoDatabaseConstruct');
 
-    // Lambda Function
-    const productProps: NodejsFunctionProps = {
-      bundling: {
-        externalModules: [
-          'aws-sdk'
-        ]
-      },
-      environment: {
-        PRIMARY_KEY: 'id',
-        DYNAMODB_TABLE_NAME: dynamoDB.productTable.tableName
-      },
-      runtime: Runtime.NODEJS_16_X,
-    };
-
-    const productFunction = new NodejsFunction(this, 'productFunction', {
-      entry: join(__dirname, '/../src/product/index.js'),
-      ...productProps
-    });
-
-    // Grant a Role to read and write in DynamoDB Table
-    dynamoDB.productTable.grantReadWriteData(productFunction);
+    const productMicroservice = new MicroservicesConstruct(this, 'MicroservicesConstruct', dynamoDB);
 
     // API Gateway
-
     const productApiGateway = new LambdaRestApi(this, 'productApi', {
       restApiName: 'Product Service',
-      handler: productFunction,
+      handler: productMicroservice.productMicroservice,
       proxy: false
     })
 
