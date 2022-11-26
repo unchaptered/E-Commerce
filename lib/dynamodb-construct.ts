@@ -3,17 +3,24 @@ import { Construct } from 'constructs';
 
 // CDK Dependencies
 import { RemovalPolicy } from 'aws-cdk-lib';
-import { AttributeType, BillingMode, Table } from 'aws-cdk-lib/aws-dynamodb';
+import { AttributeType, BillingMode, ITable, Table } from 'aws-cdk-lib/aws-dynamodb';
 
 export class DynamoDBConstruct extends Construct {
 
-    public readonly productTable: Table;
-    public readonly basketTable: Table;
+    public readonly productTable: ITable;
+    public readonly basketTable: ITable;
     constructor(scope: Construct, id: string) {
         super(scope, id);
 
-        // product : PK: id -- name - description - imageFile - price - category
-        this.productTable = new Table(this, 'product', {
+        this.productTable = this.createProductTable();
+        this.basketTable = this.createBasketTable();
+    }
+
+    /**
+     * product : PK: id -- name - description - imageFile - price - category
+     */
+    private createProductTable(): ITable {
+        return new Table(this, 'product', {
             partitionKey: {
                 name: 'id',
                 type: AttributeType.STRING
@@ -22,10 +29,14 @@ export class DynamoDBConstruct extends Construct {
             removalPolicy: RemovalPolicy.DESTROY,
             billingMode: BillingMode.PAY_PER_REQUEST
         });
+    }
 
-        // basket : PK: id - username - basektItemList[]
-        // basketItem : { quantity - color - price - productId - productName }
-        this.basketTable = new Table(this, 'basket', {
+    /**
+     * basket : PK: id - username - basektItemList[]
+     * basketItem : { quantity - color - price - productId - productName }
+     */
+    private createBasketTable(): ITable {
+        return new Table(this, 'basket', {
             partitionKey: {
                 name: 'username',
                 type: AttributeType.STRING
