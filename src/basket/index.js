@@ -144,9 +144,31 @@ const checkoutBasket = async (event) => {
 	// implement function
 }
 
+/**
+ * @link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/putitemcommand.html
+ */
 const createBasket = async (event) => {
 	console.log('createBasket');
-	// implement function
+	
+	try {
+		
+		const parsedBody = JSON.parse(event.body);
+
+		/** @type { import("@aws-sdk/client-dynamodb").PutItemCommandInput} */
+		const params = {
+			TableName: process.env.DYNAMODB_TABLE_NAME,
+			Item: marshall(parsedBody || {})
+		};
+
+		const createResult = await ddbClient.send(new PutItemCommand(params));
+		console.log('createBasket ddbClient Result:', JSON.stringify(createResult));
+
+		return createResult;
+
+	} catch(e) {
+		console.error(e);
+		throw e;
+	}
 }
 
 const deleteBasket = async (userName) => {
