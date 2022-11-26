@@ -106,8 +106,7 @@ const getBasket = async (userName) => {
 			Key: marshall({ userName: userName })
 		};
 		const { Item } = await ddbClient.send(new GetItemCommand(params));
-
-		console.log(Item);
+		console.log('getBasket Items:', JSON.stringify(Item));
 
 		return (Item) ? unmarshall(Item) : {};
 		
@@ -117,9 +116,27 @@ const getBasket = async (userName) => {
 	}
 }
 
+/**
+ * @link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/scancommand.html
+ */
 const getAllBaskets = async () => {
 	console.log('getAllBaskets');
-	// implement function
+	
+	try {
+		
+		/** @type { import("@aws-sdk/client-dynamodb").GetItemCommandInput } */
+		const params = {
+			TableName: process.env.DYNAMODB_TABLE_NAME
+		};
+		const { Item } = await ddbClient.send(new ScanCommand(params));
+		console.log('getAllBaskets Items:', JSON.stringify(Item));
+
+		return (Item) ? unmarshall(Item) : {};
+		
+	} catch(e) {
+		console.error(e);
+		throw e;
+	}
 }
 
 const checkoutBasket = async (event) => {
