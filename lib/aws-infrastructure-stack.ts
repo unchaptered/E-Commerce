@@ -18,5 +18,9 @@ export class AwsInfrastructureStack extends Stack {
     const microservices = new MicroservicesConstruct(this, 'MicroservicesConstruct', {
       productTable: dynamoDB.productTable
     });
+
+    const apiGateway = new ApiGatewayConstruct(this, 'ApiGateway', {
+      productMicroservice: microservices.productMicroservice
+    });
   }
 }
