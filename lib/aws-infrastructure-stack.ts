@@ -16,11 +16,13 @@ export class AwsInfrastructureStack extends Stack {
     const dynamoDB = new DynamoDBConstruct(this, 'DynamoDatabaseConstruct');
 
     const microservices = new MicroservicesConstruct(this, 'MicroservicesConstruct', {
-      productTable: dynamoDB.productTable
+      productTable: dynamoDB.productTable,
+      basketTable: dynamoDB.basketTable
     });
 
     const apiGateway = new ApiGatewayConstruct(this, 'ApiGateway', {
-      productMicroservice: microservices.productMicroservice
+      productMicroservice: microservices.productMicroservice,
+      basketMicroservice: microservices.basketMicroservice
     });
   }
 }
