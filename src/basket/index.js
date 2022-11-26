@@ -92,9 +92,29 @@ exports.handler = async function (event) {
 	}
 };
 
+/**
+ * @link https://docs.aws.amazon.com/AWSJavaScriptSDK/v3/latest/clients/client-dynamodb/classes/getitemcommand.html
+ */
 const getBasket = async (userName) => {
 	console.log('getBasket');
-	// implement function
+
+	try {
+		
+		/** @type { import("@aws-sdk/client-dynamodb").GetItemCommandInput } */
+		const params = {
+			TableName: process.env.DYNAMODB_TABLE_NAME,
+			Key: marshall({ userName: userName })
+		};
+		const { Item } = await ddbClient.send(new GetItemCommand(params));
+
+		console.log(Item);
+
+		return (Item) ? unmarshall(Item) : {};
+		
+	} catch(e) {
+		console.error(e);
+		throw e;
+	}
 }
 
 const getAllBaskets = async () => {
