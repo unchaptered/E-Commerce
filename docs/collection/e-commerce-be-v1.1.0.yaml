@@ -1,0 +1,381 @@
+_type: export
+__export_format: 4
+__export_date: 2022-11-26T11:07:20.824Z
+__export_source: insomnia.desktop.app:v2022.6.0
+resources:
+  - _id: req_ef5a2d8ed5c947c58869d0b16352e744
+    parentId: fld_db5f26d34f2f4b15be453ec9cdece434
+    modified: 1668929651327
+    created: 1668929414039
+    url: "{{ _.PRODUCT_GATEWAY }}/product"
+    name: /product
+    description: Documents
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1668929414039
+    isPrivate: false
+    settingStoreCookies: false
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_db5f26d34f2f4b15be453ec9cdece434
+    parentId: fld_20d04fc07aa1443584c2f851ca139e05
+    modified: 1668929443118
+    created: 1668929404727
+    name: product microservices
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1668929404927
+    _type: request_group
+  - _id: fld_20d04fc07aa1443584c2f851ca139e05
+    parentId: wrk_b45dce84885949c0b6b808a1f53997d5
+    modified: 1668929411622
+    created: 1668929411622
+    name: production
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1668929411622
+    _type: request_group
+  - _id: wrk_b45dce84885949c0b6b808a1f53997d5
+    parentId: null
+    modified: 1668929319306
+    created: 1668929319306
+    name: E-Commerce
+    description: ""
+    scope: collection
+    _type: workspace
+  - _id: req_96d3c754f0084f23b25f660decfb3c8c
+    parentId: fld_db5f26d34f2f4b15be453ec9cdece434
+    modified: 1668934501860
+    created: 1668929579016
+    url: "{{ _.PRODUCT_GATEWAY }}/product/{{ _.productId }}"
+    name: /product?category=
+    description: ""
+    method: GET
+    body: {}
+    parameters:
+      - id: pair_573bedfed4d042cf8902c658eb4e0c58
+        name: category
+        value: Phone
+        description: ""
+    headers: []
+    authentication: {}
+    metaSortKey: -1668798677459.5
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_cb3d016c034449088eb0b1c4f71f3aca
+    parentId: fld_db5f26d34f2f4b15be453ec9cdece434
+    modified: 1668934008073
+    created: 1668929582499
+    url: "{{ _.PRODUCT_GATEWAY }}/product"
+    name: /product
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"name": "iPhone X",
+        	"description": "This phone is the company's biggest change to ",
+        	"imageFile": "product-1.png",
+        	"category": "Phone",
+        	"price": 950.4
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_0092b3363f9c4fe488fde2e50d7fbb0f
+    authentication: {}
+    metaSortKey: -1668700625024.875
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_4dc4b7e13e8b4247a1619f7df6b6c2af
+    parentId: fld_db5f26d34f2f4b15be453ec9cdece434
+    modified: 1668931906372
+    created: 1668930578029
+    url: "{{ _.PRODUCT_GATEWAY }}/product"
+    name: /product
+    description: ""
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"name": "Samsung 10",
+        	"description": "This phone is the company's biggest change to ",
+        	"imageFile": "product-1.png",
+        	"category": "Phone",
+        	"price": 950.4
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+        id: pair_0092b3363f9c4fe488fde2e50d7fbb0f
+    authentication: {}
+    metaSortKey: -1668696539506.7656
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_cd594c2e80494869a5e0245a2302fd43
+    parentId: fld_db5f26d34f2f4b15be453ec9cdece434
+    modified: 1668931892166
+    created: 1668929580823
+    url: "{{ _.PRODUCT_GATEWAY }}/product/{{ _.productId }}"
+    name: /product/{id}
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1668692453988.6562
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_c5a0f97d3ca74cf4a07c5a0fca380a43
+    parentId: fld_db5f26d34f2f4b15be453ec9cdece434
+    modified: 1668932201512
+    created: 1668929583076
+    url: "{{ _.PRODUCT_GATEWAY }}/product/{{ _.productId }}"
+    name: /product/{id}
+    description: ""
+    method: PUT
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"name": "iPhone X2"
+        }
+    parameters: []
+    headers:
+      - name: Content-Type
+        value: application/json
+    authentication: {}
+    metaSortKey: -1668684282952.4375
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_43b1d497c72a4fd196ad9f26d230ee85
+    parentId: fld_db5f26d34f2f4b15be453ec9cdece434
+    modified: 1668934562000
+    created: 1668929584410
+    url: "{{ _.PRODUCT_GATEWAY }}/product/{{ _.productId }}"
+    name: /product/product/{id}
+    description: ""
+    method: DELETE
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1668676111916.2188
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_c1cc950aaebf43f3af4c3c900df22a95
+    parentId: fld_deb1a54d123b43489ecb06dc0762adee
+    modified: 1669460688546
+    created: 1669460586941
+    url: "{{ _.BASKET_GATEWAY }}/basket"
+    name: /basket
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1668929404827
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_deb1a54d123b43489ecb06dc0762adee
+    parentId: fld_20d04fc07aa1443584c2f851ca139e05
+    modified: 1669460566595
+    created: 1669460546436
+    name: basket microservices
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1668929404877
+    _type: request_group
+  - _id: req_89a61a34fa564098a2c6924873e68089
+    parentId: fld_deb1a54d123b43489ecb06dc0762adee
+    modified: 1669460681963
+    created: 1669460592823
+    url: "{{ _.BASKET_GATEWAY }}/basket"
+    name: /basket
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1668864041143.25
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_e47fd7dc0b664303b90bab1f46a64d33
+    parentId: fld_deb1a54d123b43489ecb06dc0762adee
+    modified: 1669460709595
+    created: 1669460593633
+    url: "{{ _.BASKET_GATEWAY }}/basket/{{ _.userName }}"
+    name: /basket/{userName}
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1668831359301.375
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_851dcb5c49b34c9c9471943f0431164f
+    parentId: fld_deb1a54d123b43489ecb06dc0762adee
+    modified: 1669460729950
+    created: 1669460593986
+    url: "{{ _.BASKET_GATEWAY }}/basket/{{ _.userName }}"
+    name: /basket/{userName}
+    description: ""
+    method: DELETE
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1668815018380.4375
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: req_0f787938985d475a9a20d1ca0f8be1c3
+    parentId: fld_deb1a54d123b43489ecb06dc0762adee
+    modified: 1669460745692
+    created: 1669460733829
+    url: "{{ _.BASKET_GATEWAY }}/basket/checkout"
+    name: /basket/checkout
+    description: ""
+    method: POST
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1668806847919.9688
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: env_f0736e4742662b255cdb61b40894a93206421d4d
+    parentId: wrk_b45dce84885949c0b6b808a1f53997d5
+    modified: 1668931875440
+    created: 1668929319316
+    name: Base Environment
+    data:
+      PRODUCT_GATEWAY: https://1678veral8.execute-api.us-east-1.amazonaws.com/prod
+      productId: RC1SFD0BO4KP6L3TFLJ73POV47VV4KQNSO5AEMVJF66Q9ASUAAJG
+    dataPropertyOrder:
+      "&":
+        - PRODUCT_GATEWAY
+        - productId
+    color: null
+    isPrivate: false
+    metaSortKey: 1668929319316
+    _type: environment
+  - _id: jar_f0736e4742662b255cdb61b40894a93206421d4d
+    parentId: wrk_b45dce84885949c0b6b808a1f53997d5
+    modified: 1668929319318
+    created: 1668929319318
+    name: Default Jar
+    cookies: []
+    _type: cookie_jar
+  - _id: spc_f5e38612018f4846806c4ee08ff01004
+    parentId: wrk_b45dce84885949c0b6b808a1f53997d5
+    modified: 1668929319310
+    created: 1668929319310
+    fileName: E-Commerce
+    contents: ""
+    contentType: yaml
+    _type: api_spec
+  - _id: env_2903b3067a0e4609b2fbd11a073586e6
+    parentId: env_f0736e4742662b255cdb61b40894a93206421d4d
+    modified: 1669460663238
+    created: 1668931879109
+    name: production
+    data:
+      PRODUCT_GATEWAY: PRODUCT_GATEWAY
+      BASKET_GATEWAY: PRODUCT_GATEWAY
+      productId: productId
+      userName: sdfa
+    dataPropertyOrder:
+      "&":
+        - PRODUCT_GATEWAY
+        - BASKET_GATEWAY
+        - productId
+        - userName
+    color: null
+    isPrivate: false
+    metaSortKey: 1668931879109
+    _type: environment
