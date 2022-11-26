@@ -28,17 +28,17 @@ exports.handler = async function (event) {
 			case 'GET':
 				if (event.queryStringParameters != null) {
 
-					/** GET product/{id}?category=Phone */
+					/** GET /product/{id}?category=Phone */
 					resultBody = await getProductByCategory(event);
 
 				} else if (event.pathParameters != null) {
 
-					/** GET product/{id} */
+					/** GET /product/{id} */
 					resultBody = await getProduct(event.pathParameters.id);
 
 				} else {
 
-					/** GET product */
+					/** GET /product */
 					resultBody = await getAllProducts();
 
 				}
@@ -51,13 +51,13 @@ exports.handler = async function (event) {
 
 			case 'DELETE':
 
-				/** DELETE product/{id} */
+				/** DELETE /product/{id} */
 				resultBody = await deleteProduct(event.pathParameters.id);
 				break;
 
 			case 'PUT':
 
-				/** PUT product/{id} */
+				/** PUT /product/{id} */
 				resultBody = await updateProduct(event);
 				break;
 
@@ -76,7 +76,7 @@ exports.handler = async function (event) {
 		};
 
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 
 		return {
 			statusCode: 500,
