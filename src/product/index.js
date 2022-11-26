@@ -112,7 +112,7 @@ const getProduct = async (productId) => {
 		return (Item) ? unmarshall(Item) : {};
 
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		throw e;
 	}
 }
@@ -145,7 +145,7 @@ const getProductByCategory = async (event) => {
 		return Items.map((item) => unmarshall(item));
 
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		throw e;
 	}
 }
@@ -170,7 +170,7 @@ const getAllProducts = async () => {
 		return (Items) ? Items.map((item) => unmarshall(item)) : {};
 
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		throw e;
 	}
 }
@@ -200,7 +200,7 @@ const createProduct = async (event) => {
 		return createResult;
 
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		throw e;
 	}
 }
@@ -225,7 +225,7 @@ const deleteProduct = async (productId) => {
 
 		return deleteResult;
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		throw e;
 	}
 }
@@ -267,7 +267,7 @@ const updateProduct = async (event) => {
 		return updateResult;
 
 	} catch (e) {
-		console.log(e);
+		console.error(e);
 		throw e;
 	}
 }
