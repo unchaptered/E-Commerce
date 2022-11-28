@@ -129,7 +129,6 @@ const getAllBaskets = async () => {
 			TableName: process.env.DYNAMODB_TABLE_NAME
 		};
 		const { Items } = await ddbClient.send(new ScanCommand(params));
-		console.log(process.env.DYNAMODB_TABLE_NAME);
 		console.log('getAllBaskets Items:', JSON.stringify(Items));
 
 		return (Items) ? Items.map((item) => unmarshall(item)) : {};
