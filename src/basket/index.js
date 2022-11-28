@@ -26,8 +26,8 @@ exports.handler = async function (event) {
 		 */
 		switch (event.httpMethod) {
 			case 'GET':
-                
-            if (event.pathParameters != null) {
+
+				if (event.pathParameters != null) {
 
 					/** GET /basket/{id} */
 					resultBody = await getBasket(event.pathParameters.userName);
@@ -42,17 +42,17 @@ exports.handler = async function (event) {
 
 			case 'POST':
 
-                if (event.pathParameters == "/basket/checkout") {
+				if (event.pathParameters == "/basket/checkout") {
 
-                    /** POST /basket/checkout */
-                    resultBody = await checkoutBasket(event);
+					/** POST /basket/checkout */
+					resultBody = await checkoutBasket(event);
 
-                } else {
+				} else {
 
-                    /** POST /basket */
-                    resultBody = await createBasket(event);
+					/** POST /basket */
+					resultBody = await createBasket(event);
 
-                }
+				}
 				break;
 
 			case 'DELETE':
@@ -99,7 +99,7 @@ const getBasket = async (userName) => {
 	console.log('getBasket');
 
 	try {
-		
+
 		/** @type { import("@aws-sdk/client-dynamodb").GetItemCommandInput } */
 		const params = {
 			TableName: process.env.DYNAMODB_TABLE_NAME,
@@ -109,8 +109,8 @@ const getBasket = async (userName) => {
 		console.log('getBasket Items:', JSON.stringify(Item));
 
 		return (Item) ? unmarshall(Item) : {};
-		
-	} catch(e) {
+
+	} catch (e) {
 		console.error(e);
 		throw e;
 	}
@@ -121,19 +121,20 @@ const getBasket = async (userName) => {
  */
 const getAllBaskets = async () => {
 	console.log('getAllBaskets');
-	
+
 	try {
-		
+
 		/** @type { import("@aws-sdk/client-dynamodb").ScanCommandInput } */
 		const params = {
 			TableName: process.env.DYNAMODB_TABLE_NAME
 		};
-		const { Item } = await ddbClient.send(new ScanCommand(params));
-		console.log('getAllBaskets Items:', JSON.stringify(Item));
+		const { Items } = await ddbClient.send(new ScanCommand(params));
+		console.log(process.env.DYNAMODB_TABLE_NAME);
+		console.log('getAllBaskets Items:', JSON.stringify(Items));
 
-		return (Item) ? unmarshall(Item) : {};
-		
-	} catch(e) {
+		return (Items) ? Items.map((item) => unmarshall(item)) : {};
+
+	} catch (e) {
 		console.error(e);
 		throw e;
 	}
@@ -149,9 +150,9 @@ const checkoutBasket = async (event) => {
  */
 const createBasket = async (event) => {
 	console.log('createBasket');
-	
+
 	try {
-		
+
 		const parsedBody = JSON.parse(event.body);
 
 		/** @type { import("@aws-sdk/client-dynamodb").PutItemCommandInput} */
@@ -165,7 +166,7 @@ const createBasket = async (event) => {
 
 		return createResult;
 
-	} catch(e) {
+	} catch (e) {
 		console.error(e);
 		throw e;
 	}
@@ -173,7 +174,7 @@ const createBasket = async (event) => {
 
 const deleteBasket = async (userName) => {
 	console.log('deleteBasket');
-	
+
 	try {
 
 		/** @type { import("@aws-sdk/client-dynamodb").DeleteItemCommandInput } */
@@ -187,7 +188,7 @@ const deleteBasket = async (userName) => {
 
 		return deleteResult;
 
-	} catch(e) {
+	} catch (e) {
 		console.error(e);
 		throw e;
 	}
