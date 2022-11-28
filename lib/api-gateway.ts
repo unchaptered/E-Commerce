@@ -43,15 +43,15 @@ export class ApiGatewayConstruct extends Construct {
             proxy: false
         })
 
-        const product = basketApiGateway.root.addResource('basket');
-        product.addMethod('GET');               // GET /basket
-        product.addMethod('POST');              // POST /basket
+        const basket = basketApiGateway.root.addResource('basket');
+        basket.addMethod('GET');               // GET /basket
+        basket.addMethod('POST');              // POST /basket
 
-        const singleProduct = product.addResource('{uesrName}');
-        singleProduct.addMethod('GET');         // GET  /basket/{uesrName}
-        singleProduct.addMethod('DELETE');      // DELETE /basket/{uesrName}
+        const singleBasket = basket.addResource('{userName}');
+        singleBasket.addMethod('GET');         // GET  /basket/{userName}
+        singleBasket.addMethod('DELETE');      // DELETE /basket/{userName}
 
-        const basketcheckout = product.addResource('checkout');
+        const basketcheckout = basket.addResource('checkout');
         basketcheckout.addMethod('POST')        // POST /basket/checkout
     }
 }
