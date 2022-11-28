@@ -1,6 +1,6 @@
 _type: export
 __export_format: 4
-__export_date: 2022-11-26T11:07:20.824Z
+__export_date: 2022-11-28T11:27:18.167Z
 __export_source: insomnia.desktop.app:v2022.6.0
 resources:
   - _id: req_ef5a2d8ed5c947c58869d0b16352e744
@@ -246,15 +246,38 @@ resources:
     _type: request_group
   - _id: req_89a61a34fa564098a2c6924873e68089
     parentId: fld_deb1a54d123b43489ecb06dc0762adee
-    modified: 1669460681963
+    modified: 1669634671750
     created: 1669460592823
     url: "{{ _.BASKET_GATEWAY }}/basket"
     name: /basket
     description: ""
     method: POST
-    body: {}
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"userName": "{{ _.userName }}",
+        	"items": [
+        		{
+        			"quantity": 2,
+        			"color":  "Red",
+        			"price": 950,
+        			"productId": "2266628b-ff81-4a9f-a82d-8c46766aa122",
+        			"productName": "IPhone X"
+        		},
+        		{
+        			"quantity": 3,
+        			"color":  "Blue",
+        			"price": 870,
+        			"productId": "c4f49ceb-b1d4-4b2b-bbae-31f4e024b9d5",
+        			"productName": "Samsung 10"
+        		}
+        	]
+        }
     parameters: []
-    headers: []
+    headers:
+      - name: Content-Type
+        value: application/json
     authentication: {}
     metaSortKey: -1668864041143.25
     isPrivate: false
@@ -309,15 +332,29 @@ resources:
     _type: request
   - _id: req_0f787938985d475a9a20d1ca0f8be1c3
     parentId: fld_deb1a54d123b43489ecb06dc0762adee
-    modified: 1669460745692
+    modified: 1669634815892
     created: 1669460733829
     url: "{{ _.BASKET_GATEWAY }}/basket/checkout"
     name: /basket/checkout
     description: ""
     method: POST
-    body: {}
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"userName": "{{ _.userName }}",
+        	"totalPrice": 0,
+        	"firstName": "mehmet",
+        	"lastName" : "ozkaya",
+        	"email": "ezozkme@gmail.com",
+        	"address": "istanbul",
+        	"cardInfo": "5554443322",
+        	"paymentMethod": 1
+        }
     parameters: []
-    headers: []
+    headers:
+      - name: Content-Type
+        value: application/json
     authentication: {}
     metaSortKey: -1668806847919.9688
     isPrivate: false
@@ -328,6 +365,37 @@ resources:
     settingRebuildPath: true
     settingFollowRedirects: global
     _type: request
+  - _id: req_ff8d13b304e6473b8653afec74565e93
+    parentId: fld_b7ac5561eac3474b829abba51fc04ebb
+    modified: 1668929446264
+    created: 1668929446264
+    url: ""
+    name: New Request
+    description: ""
+    method: GET
+    body: {}
+    parameters: []
+    headers: []
+    authentication: {}
+    metaSortKey: -1668929446264
+    isPrivate: false
+    settingStoreCookies: true
+    settingSendCookies: true
+    settingDisableRenderRequestBody: false
+    settingEncodeUrl: true
+    settingRebuildPath: true
+    settingFollowRedirects: global
+    _type: request
+  - _id: fld_b7ac5561eac3474b829abba51fc04ebb
+    parentId: fld_20d04fc07aa1443584c2f851ca139e05
+    modified: 1668929440859
+    created: 1668929436107
+    name: order microservices
+    description: ""
+    environment: {}
+    environmentPropertyOrder: null
+    metaSortKey: -1668929404877
+    _type: request_group
   - _id: env_f0736e4742662b255cdb61b40894a93206421d4d
     parentId: wrk_b45dce84885949c0b6b808a1f53997d5
     modified: 1668931875440
@@ -361,14 +429,14 @@ resources:
     _type: api_spec
   - _id: env_2903b3067a0e4609b2fbd11a073586e6
     parentId: env_f0736e4742662b255cdb61b40894a93206421d4d
-    modified: 1669460663238
+    modified: 1669634815758
     created: 1668931879109
     name: production
     data:
       PRODUCT_GATEWAY: PRODUCT_GATEWAY
-      BASKET_GATEWAY: PRODUCT_GATEWAY
+      BASKET_GATEWAY: BASKET_GATEWAY
       productId: productId
-      userName: sdfa
+      userName: swn
     dataPropertyOrder:
       "&":
         - PRODUCT_GATEWAY
